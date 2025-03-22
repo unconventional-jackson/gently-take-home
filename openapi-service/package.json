@@ -1,0 +1,17 @@
+{
+  "scripts": {
+    "generate": "openapi-generator-cli generate -i swagger.json -g typescript-axios -o src",
+    "build": "tsc",
+    "bump": "npm run generate && npm run build && npm version patch --no-git-tag-version && npm i && npm publish"
+  },
+  "devDependencies": {
+    "@types/node": "^20.9.3",
+    "@openapitools/openapi-generator-cli": "^2.9.0",
+    "typescript": "*"
+  },
+  "name": "@unconventional-jackson/gently-openapi-service",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "version": "0.0.1",
+  "private": false
+}

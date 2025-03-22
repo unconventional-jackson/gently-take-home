@@ -1,0 +1,1290 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Gently OpenAPI",
+    "description": "OpenAPI for interacting with our Gently inventory management system.",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+
+  "paths": {
+    "/auth/signup": {
+      "post": {
+        "summary": "Sign up a new user",
+        "description": "Creates a new user account and sends an email verification code.",
+        "operationId": "signUp",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthSignUpRequestBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User created. Verify your email."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Bad request - missing or invalid data"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/auth/signin": {
+      "post": {
+        "summary": "Sign in a user",
+        "description": "Authenticates a user and provides access and refresh tokens if successful.",
+        "operationId": "signIn",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthSignInRequestBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sign-in successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Sign-in successful"
+                    },
+                    "user": { "$ref": "#/components/schemas/AuthUser" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Bad request - missing or invalid data"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Unauthorized - invalid credentials or unverified email"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "User not found"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/auth/verify-email": {
+      "post": {
+        "summary": "Verify user email",
+        "description": "Verifies a user's email address with a TOTP verification code, updating the email verification status.",
+        "operationId": "verifyEmail",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthVerifyEmailRequestBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Email verified successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Email verified successfully."
+                    },
+                    "user": { "$ref": "#/components/schemas/AuthUser" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Bad request - missing or invalid data"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "User not found"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/auth/forgot-password": {
+      "post": {
+        "summary": "Request password reset token",
+        "description": "Sends a password reset token to the user's email if the email is registered.",
+        "operationId": "forgotPassword",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthForgotPasswordRequestBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset token sent",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Password reset token sent"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Bad request - missing email"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "User not found"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/auth/reset-password": {
+      "post": {
+        "summary": "Reset user password",
+        "description": "Resets a user's password using a provided token and new password.",
+        "operationId": "resetPassword",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthResetPasswordBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Password updated"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Bad request - missing or invalid fields"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "User not found"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/auth/change-password": {
+      "post": {
+        "summary": "Change user password",
+        "description": "Changes a user's password by verifying the current password.",
+        "operationId": "changePassword",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthChangePasswordRequestBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Password updated"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Bad request - missing or invalid fields"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/auth/totp/setup": {
+      "post": {
+        "summary": "Setup TOTP for user",
+        "description": "Generates a TOTP secret and returns the otpauth URL for configuring TOTP on a user account.",
+        "operationId": "totpSetup",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthTOTPSetupRequestBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "TOTP setup URL generated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "otpauth_url": {
+                      "type": "string",
+                      "description": "URL for configuring TOTP in a compatible app"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "User not found"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/auth/totp/verify": {
+      "post": {
+        "summary": "Verify TOTP for user",
+        "description": "Verifies a TOTP token for a user. If the token is valid, enables TOTP for the user and issues new access and refresh tokens.",
+        "operationId": "totpVerify",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthTOTPVerifyRequestBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "TOTP verified successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "TOTP verified successfully"
+                    },
+                    "user": { "$ref": "#/components/schemas/AuthUser" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Invalid TOTP token or missing data"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "User not found or TOTP not set up"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/auth/resend-verification": {
+      "post": {
+        "summary": "Resend email verification code",
+        "description": "Resends a TOTP email verification code to the specified user email, if the user exists and has not verified their email.",
+        "operationId": "resendVerification",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthResendVerificationRequestBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Verification email resent successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Verification email resent. Verify your email."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Bad request - email is missing or email is already verified"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "User not found"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/auth/refresh-token": {
+      "post": {
+        "summary": "Verify a user authentication request",
+        "description": "Verifies a TOTP token for a standard user. If the token is valid, enables TOTP for the user and issues new access and refresh tokens.",
+        "operationId": "refreshToken",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthRefreshTokenRequestBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Access token refreshed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "access_token": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Invalid refresh token or missing data"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "User not authorized or refresh token expired"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/attributes": {
+      "get": {
+        "summary": "Get all attributes",
+        "description": "Retrieves all attributes in the system. Note, the number of attributes is limited to 100, so pagination fields are present in the API but not supported in the UI at this time.",
+        "operationId": "getAttributes",
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "The offset of the database cursor when fetching paginated attributes",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "The number of items to retrieve",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Attributes retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAttributesResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Bad request"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Internal server error"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new attribute",
+        "description": "Creates a new attribute in the system.",
+        "operationId": "createAttribute",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAttributeRequestBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Attribute created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Attribute"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Bad request - missing or invalid data"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/attributes/{attribute_id}": {
+      "put": {
+        "summary": "Update an attribute",
+        "description": "Updates an attribute in the system. Note that the attribute type cannot be changed.",
+        "operationId": "updateAttribute",
+        "parameters": [
+          {
+            "name": "attribute_id",
+            "in": "path",
+            "description": "The unique identifier for the attribute",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAttributeRequestBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Attribute updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Attribute"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Bad request - missing or invalid data"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Attribute not found"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an attribute",
+        "description": "Deletes an attribute in the system, including any applications of the attribute to products. The products themselves are not deleted, but the attribute is no longer associated with them.",
+        "operationId": "deleteAttribute",
+        "parameters": [
+          {
+            "name": "attribute_id",
+            "in": "path",
+            "description": "The unique identifier for the attribute",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Attribute deleted successfully"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Attribute not found"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/products": {
+      "get": {
+        "summary": "Get all products",
+        "description": "Retrieves all products in the system.",
+        "operationId": "getProducts",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "offset",
+            "description": "The offset / cursor location to retrieve products from",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "description": "The number of items to retrieve",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10
+            }
+          },
+          {
+            "in": "query",
+            "name": "params",
+            "description": "Dynamically templated parameters based on attribute codes to filter products by",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "{\"color_eq\": \"red\", \"size_eq\": \"large\", \"price_gt\": 100}"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Products retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetProductsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Internal server error"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new product",
+        "description": "Creates a new product in the system.",
+        "operationId": "createProduct",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "product_name": {
+                    "type": "string",
+                    "description": "The name of the product"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "The description of the product"
+                  },
+                  "attributes": {
+                    "type": "array",
+                    "description": "The attributes of the product",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "attribute_id": { "type": "string" },
+                        "attribute_value": { "type": "string" }
+                      }
+                    }
+                  }
+                },
+                "required": ["product_name", "description"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Product created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Bad request - missing or invalid data"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/products/{product_id}": {
+      "get": {
+        "summary": "Get a product",
+        "description": "Retrieves a product in the system.",
+        "operationId": "getProduct",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "description": "The unique identifier for the product",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Product not found"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Internal server error"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a product",
+        "description": "Updates a product in the system.",
+        "operationId": "updateProduct",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "description": "The unique identifier for the product",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProductRequestBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Product updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Bad request - missing or invalid data"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Product not found"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Internal server error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "responses": {
+      "ErrorResponse": {
+        "description": "Error response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "example": "Detailed error message"
+                }
+              },
+              "required": ["error"],
+              "additionalProperties": false,
+              "example": {
+                "error": "Detailed error message",
+                "message": "Error message"
+              }
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "AuthRefreshTokenRequestBody": {
+        "type": "object",
+        "description": "Request body for refreshing a token, to be used by all users",
+        "properties": {
+          "refresh_token": {
+            "type": "string",
+            "description": "The refresh token"
+          }
+        },
+        "required": ["refresh_token"]
+      },
+      "AuthSignUpRequestBody": {
+        "type": "object",
+        "description": "Request body for signing up a user, only to be used by admin users or operator users",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "The user's email address"
+          },
+          "password": {
+            "type": "string",
+            "description": "The user's password"
+          }
+        },
+        "required": ["email", "password"]
+      },
+      "AuthSignInRequestBody": {
+        "type": "object",
+        "description": "Request body for signing in a user, only to be used by admin users or operator users",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "The user's email address"
+          },
+          "password": {
+            "type": "string",
+            "description": "The user's password"
+          }
+        },
+        "required": ["email", "password"]
+      },
+      "AuthUser": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "description": "The unique ID of the user"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "The user's email address"
+          },
+          "last_active_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "The last time the user was active"
+          },
+          "access_token": {
+            "type": "string",
+            "description": "JWT access token for user authentication",
+            "nullable": true
+          },
+          "refresh_token": {
+            "type": "string",
+            "description": "JWT refresh token for user session renewal",
+            "nullable": true
+          },
+          "auth_email_verified": {
+            "type": "boolean",
+            "description": "Indicates if the email is verified",
+            "nullable": true
+          },
+          "auth_totp_verified_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "Timestamp of the last TOTP verification"
+          },
+          "auth_totp_enabled": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Indicates if TOTP is enabled for the user"
+          }
+        }
+      },
+      "AuthVerifyEmailRequestBody": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "The admin or operator user's email address"
+          },
+          "token": {
+            "type": "string",
+            "description": "TOTP verification code sent to the user's email"
+          }
+        },
+        "required": ["email", "token"]
+      },
+      "AuthResendVerificationRequestBody": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "The email address of the user requesting the verification code."
+          }
+        },
+        "required": ["email"]
+      },
+      "AuthForgotPasswordRequestBody": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "The email address of the user requesting the password reset token."
+          }
+        },
+        "required": ["email"]
+      },
+      "AuthResetPasswordBody": {
+        "type": "object",
+        "properties": {
+          "new_password": {
+            "type": "string",
+            "description": "The user's new password"
+          },
+          "token": {
+            "type": "string",
+            "description": "The reset password token sent to the user's email"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "The email address of the user (optional if user_id is provided in the session)"
+          }
+        },
+        "required": ["new_password", "token"]
+      },
+      "AuthChangePasswordRequestBody": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "The email address of the user"
+          },
+          "current_password": {
+            "type": "string",
+            "description": "The user's current password"
+          },
+          "new_password": {
+            "type": "string",
+            "description": "The user's new password"
+          }
+        },
+        "required": ["email", "current_password", "new_password"]
+      },
+      "AuthTOTPSetupRequestBody": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Email address of the user for whom TOTP is being set up"
+          }
+        },
+        "required": ["email"]
+      },
+      "AuthTOTPVerifyRequestBody": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Email address of the user verifying TOTP"
+          },
+          "token": {
+            "type": "string",
+            "description": "The TOTP token to verify"
+          }
+        },
+        "required": ["email", "token"]
+      },
+      "Attribute": {
+        "type": "object",
+        "properties": {
+          "attribute_id": {
+            "description": "The unique identifier for the attribute",
+            "type": "string"
+          },
+          "attribute_name": {
+            "description": "The name of the attribute",
+            "type": "string"
+          },
+          "attribute_type": {
+            "description": "The type of the attribute",
+            "type": "string",
+            "enum": ["string", "number", "boolean", "date", "datetime"]
+          },
+          "short_code": {
+            "description": "The short code of the attribute, this can be used for HTTP query parameters to dynamically filter products by attribute, should be alphanumeric and unique",
+            "type": "string"
+          },
+          "is_required": {
+            "description": "Whether or not the attribute is required to be assigned to a product",
+            "type": "boolean"
+          },
+          "created_at": {
+            "description": "The date and time the attribute was created",
+            "type": "string",
+            "format": "date-time"
+          },
+          "created_by": {
+            "description": "The unique ID of the user that created the attribute",
+            "type": "string"
+          },
+          "updated_at": {
+            "description": "The date and time the attribute was last updated",
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_by": {
+            "description": "The unique ID of the user that last updated the attribute",
+            "type": "string"
+          }
+        }
+      },
+      "GetAttributesResponse": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "description": "The attributes",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Attribute" }
+          },
+          "count": {
+            "description": "The total number of attributes",
+            "type": "integer"
+          },
+          "limit": {
+            "description": "The page size limit of the attributes",
+            "type": "integer"
+          },
+          "offset": {
+            "description": "The offset of the database cursor when fetching paginated attributes",
+            "type": "integer"
+          }
+        },
+        "required": ["items", "count", "limit", "offset"]
+      },
+      "CreateAttributeRequestBody": {
+        "type": "object",
+        "properties": {
+          "attribute_name": {
+            "description": "The name of the attribute",
+            "type": "string"
+          },
+          "attribute_type": {
+            "description": "The type of the attribute",
+            "type": "string",
+            "enum": ["string", "number", "boolean", "date", "datetime"]
+          },
+          "short_code": {
+            "description": "The short code of the attribute, this can be used for HTTP query parameters to dynamically filter products by attribute, should be alphanumeric and unique",
+            "type": "string"
+          },
+          "is_required": {
+            "description": "Whether or not the attribute is required to be assigned to a product",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "attribute_name",
+          "attribute_type",
+          "short_code",
+          "is_required"
+        ]
+      },
+      "UpdateAttributeRequestBody": {
+        "type": "object",
+        "properties": {
+          "attribute_name": {
+            "description": "The name of the attribute",
+            "type": "string"
+          },
+          "is_required": {
+            "description": "Whether or not the attribute is required to be assigned to a product",
+            "type": "boolean"
+          },
+          "short_code": {
+            "description": "The short code of the attribute, this can be used for HTTP query parameters to dynamically filter products by attribute, should be alphanumeric and unique",
+            "type": "string"
+          }
+        }
+      },
+      "Product": {
+        "type": "object",
+        "properties": {
+          "product_id": {
+            "description": "The unique identifier for the product",
+            "type": "string"
+          },
+          "product_name": {
+            "description": "The name of the product",
+            "type": "string"
+          },
+          "product_description": {
+            "description": "The description of the product",
+            "type": "string"
+          },
+          "attributes": {
+            "description": "The attributes of the product",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "attribute_id": {
+                  "type": "string"
+                },
+                "attribute_value": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "created_at": {
+            "description": "The date and time the product was created",
+            "type": "string",
+            "format": "date-time"
+          },
+          "created_by": {
+            "description": "The unique ID of the user that created the product",
+            "type": "string"
+          },
+          "updated_at": {
+            "description": "The date and time the product was last updated",
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_by": {
+            "description": "The unique ID of the user that last updated the product",
+            "type": "string"
+          }
+        }
+      },
+      "UpdateProductRequestBody": {
+        "type": "object",
+        "properties": {
+          "product_name": {
+            "description": "The name of the product",
+            "type": "string"
+          },
+          "product_description": {
+            "description": "The description of the product",
+            "type": "string",
+            "nullable": true
+          },
+          "attributes": {
+            "description": "The attributes of the product",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "attribute_id": {
+                  "type": "string"
+                },
+                "attribute_value": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "GetProductsResponse": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "description": "The products",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Product" }
+          },
+          "count": {
+            "description": "The total number of products",
+            "type": "integer"
+          },
+          "limit": {
+            "description": "The page size limit of the products",
+            "type": "integer"
+          },
+          "offset": {
+            "description": "The offset of the database cursor when fetching paginated products",
+            "type": "integer"
+          }
+        },
+        "required": ["items", "count", "limit", "offset"]
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "example": "Detailed error message"
+          }
+        }
+      }
+    }
+  }
+}
