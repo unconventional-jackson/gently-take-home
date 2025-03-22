@@ -16,9 +16,12 @@ export interface IConfig {
   SERVICE: string;
 
   // General application configuration
+  AWS_REGION: string;
   ACCESS_TOKEN_SECRET: string;
   APPLICATION_PORT: number;
   POSTGRES_HOST: string;
+  POSTGRES_PROXY_HOST?: string;
+  POSTGRES_PROXY_READONLY_HOST?: string;
   POSTGRES_USER: string;
   POSTGRES_PASSWORD: string;
   POSTGRES_DB: string;
@@ -50,11 +53,31 @@ export async function getConfig(): Promise<IConfig> {
       throw new Error("Invalid secrets");
     }
 
+    if (!("AWS_REGION" in secrets) || typeof secrets.AWS_REGION !== "string") {
+      throw new Error("Missing environment variable AWS_REGION");
+    }
+    process.env.AWS_REGION = secrets.AWS_REGION;
     if (
       !("POSTGRES_HOST" in secrets) ||
       typeof secrets.POSTGRES_HOST !== "string"
     ) {
       throw new Error("Missing environment variable POSTGRES_HOST");
+    }
+
+    let postgresProxyHost: string | undefined;
+    if ("POSTGRES_PROXY_HOST" in secrets) {
+      if (typeof secrets.POSTGRES_PROXY_HOST !== "string") {
+        throw new Error("Invalid environment variable POSTGRES_PROXY_HOST");
+      }
+      postgresProxyHost = secrets.POSTGRES_PROXY_HOST;
+    }
+    if ("POSTGRES_PROXY_READONLY_HOST" in secrets) {
+      if (typeof secrets.POSTGRES_PROXY_READONLY_HOST !== "string") {
+        throw new Error(
+          "Invalid environment variable POSTGRES_PROXY_READONLY_HOST"
+        );
+      }
+      postgresProxyHost = secrets.POSTGRES_PROXY_READONLY_HOST;
     }
 
     if (
@@ -127,7 +150,10 @@ export async function getConfig(): Promise<IConfig> {
     }
 
     config = {
+      AWS_REGION: secrets.AWS_REGION,
       POSTGRES_HOST: secrets.POSTGRES_HOST,
+      POSTGRES_PROXY_HOST: postgresProxyHost,
+      POSTGRES_PROXY_READONLY_HOST: postgresProxyHost,
       POSTGRES_USER: secrets.POSTGRES_USER,
       POSTGRES_PASSWORD: secrets.POSTGRES_PASSWORD,
       POSTGRES_DB: secrets.POSTGRES_DB,
