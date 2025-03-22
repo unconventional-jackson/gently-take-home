@@ -1,0 +1,19 @@
+{
+  "scripts": {
+    "build": "tsc",
+    "bump": "npm run build && npm version patch --no-git-tag-version && npm i && npm publish"
+  },
+  "devDependencies": {
+    "@types/node": "^20.9.3",
+    "typescript": "*"
+  },
+  "name": "@unconventional-jackson/gently-common-service",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "version": "0.0.1",
+  "private": false,
+  "dependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.772.0",
+    "@unconventional-code/observability-sdk": "^0.0.38"
+  }
+}
