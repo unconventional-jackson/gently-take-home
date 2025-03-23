@@ -28,12 +28,14 @@ export const getProductId = () => uuidv4() as ProductId;
 export class ProductModel extends EntityModel<ProductModel> {
   @PrimaryKey
   @Attribute(DataTypes.STRING)
+  @NotNull
   @Unique
   @Default(() => getProductId())
   declare product_id: CreationOptional<ProductId>;
 
   @Attribute(DataTypes.STRING)
   @NotNull
+  @Unique
   declare product_name: string;
 
   @Attribute(DataTypes.TEXT)

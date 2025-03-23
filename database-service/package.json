@@ -6,7 +6,7 @@
     "@types/bcrypt": "^5.0.2",
     "@types/speakeasy": "^2.0.10",
     "@unconventional-code/eslint-config": "^0.0.11",
-    "@unconventional-code/observability-sdk": "^0.0.25",
+    "@unconventional-code/observability-sdk": "^0.0.38",
     "@unconventional-code/prettier-config": "^0.0.3",
     "eslint-import-resolver-typescript": "^3.6.1",
     "pg": "^8.13.1",
@@ -22,12 +22,15 @@
   },
   "name": "@unconventional-jackson/gently-database-service",
   "prettier": "@unconventional-code/prettier-config",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "lint:check:eslint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:check:prettier": "prettier --check ./**/*.{ts,js,tsx,jsx,graphql,yaml,yml} --no-error-on-unmatched-pattern",
     "lint:check:tsc": "tsc --noEmit",
     "lint:fix:prettier": "prettier --write . --no-error-on-unmatched-pattern",
     "build": "rm -rf dist && tsc --build --clean && tsc",
+    "bump": "npm run build && npm version patch --no-git-tag-version && npm i && npm publish",
     "migration:up:local": "npm run build && cross-env ENV=local sequelize-cli db:migrate --migrations-path ./dist/database/migrations --config ./dist/database/config.js --env local",
     "migration:down:local": "npm run build && cross-env ENV=local sequelize-cli db:migrate:undo --migrations-path ./dist/database/migrations --config ./dist/database/config.js --env local",
     "migration:up:dev": "npm run build && cross-env ENV=dev sequelize-cli db:migrate --migrations-path ./dist/database/migrations --config ./dist/database/config.js --env dev",
@@ -35,7 +38,7 @@
     "migration:up:prod": "npm run build && cross-env ENV=prod sequelize-cli db:migrate --migrations-path ./dist/database/migrations --config ./dist/database/config.js --env prod",
     "migration:down:prod": "npm run build && cross-env ENV=prod sequelize-cli db:migrate:undo --migrations-path ./dist/database/migrations --config ./dist/database/config.js --env prod"
   },
-  "version": "1.0.0",
+  "version": "1.0.4",
   "dependencies": {
     "@aws-sdk/rds-signer": "^3.772.0",
     "@unconventional-jackson/gently-common-service": "^0.0.2",

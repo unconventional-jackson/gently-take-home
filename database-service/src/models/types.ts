@@ -5,7 +5,14 @@ import {
   Model,
   NonAttribute,
 } from '@sequelize/core';
-import { AllowNull, Attribute, BelongsTo, NotNull, Table } from '@sequelize/core/decorators-legacy';
+import {
+  AllowNull,
+  Attribute,
+  BelongsTo,
+  Default,
+  NotNull,
+  Table,
+} from '@sequelize/core/decorators-legacy';
 
 // eslint-disable-next-line import/no-cycle
 import { UserId, UserModel } from './Users';
@@ -26,6 +33,7 @@ export class EntityModel<M extends EntityModel = any> extends Model<
    */
   @Attribute(DataTypes.DATE)
   @NotNull
+  @Default(DataTypes.NOW)
   declare created_at?: Date;
 
   /**
@@ -45,6 +53,7 @@ export class EntityModel<M extends EntityModel = any> extends Model<
    */
   @Attribute(DataTypes.DATE)
   @NotNull
+  @Default(DataTypes.NOW)
   declare updated_at?: Date;
 
   /**

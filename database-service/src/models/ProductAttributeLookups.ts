@@ -31,6 +31,7 @@ export class ProductAttributeLookupModel extends EntityModel<ProductAttributeLoo
   @PrimaryKey
   @Attribute(DataTypes.STRING)
   @Unique
+  @NotNull
   @Default(() => getProductAttributeLookupId())
   declare product_attribute_lookup_id: CreationOptional<ProductAttributeLookupId>;
 

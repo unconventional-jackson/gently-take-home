@@ -1,0 +1,18 @@
+FROM --platform=linux/amd64 node:22.12-alpine as builder
+
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci --verbose
+
+COPY . .
+RUN npm run build
+
+FROM --platform=linux/amd64 node:22.12-alpine
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci --verbose --omit=dev
+COPY --from=builder /app/dist ./dist
+
+EXPOSE 4000
+
+CMD ["npm", "run", "start:prod"]

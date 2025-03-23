@@ -4,7 +4,7 @@
     "module": "nodenext",
     "moduleResolution": "nodenext",
     "lib": ["es2020", "dom"],
-    "declaration": true,
+    "declaration": false,
     "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true,
@@ -24,6 +24,6 @@
     "skipLibCheck": true,
     "typeRoots": ["./node_modules/@types", "./types"]
   },
-  "include": ["src", "types"],
+  "include": ["src"],
   "exclude": ["node_modules"]
 }

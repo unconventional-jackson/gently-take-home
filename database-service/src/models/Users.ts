@@ -9,11 +9,11 @@ import {
 import {
   AllowNull,
   Attribute,
-  AutoIncrement,
   Default,
   NotNull,
   PrimaryKey,
   Table,
+  Unique,
 } from '@sequelize/core/decorators-legacy';
 import { Tagged } from 'type-fest';
 import { v4 as uuidv4 } from 'uuid';
@@ -42,7 +42,9 @@ export class UserModel extends Model<
    */
   @PrimaryKey
   @Attribute(DataTypes.STRING)
-  @AutoIncrement
+  @NotNull
+  @Default(() => getUserId())
+  @Unique
   declare user_id: CreationOptional<UserId>;
 
   /**

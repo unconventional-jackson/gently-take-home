@@ -38,6 +38,7 @@ export class AttributeModel extends EntityModel<AttributeModel> {
   @PrimaryKey
   @Attribute(DataTypes.STRING)
   @Unique
+  @NotNull
   @Default(() => getAttributeId())
   declare attribute_id: CreationOptional<AttributeId>;
 

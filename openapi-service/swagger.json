@@ -558,7 +558,7 @@
       }
     },
     "/attributes/{attribute_id}": {
-      "put": {
+      "patch": {
         "summary": "Update an attribute",
         "description": "Updates an attribute in the system. Note that the attribute type cannot be changed.",
         "operationId": "updateAttribute",
@@ -701,29 +701,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "product_name": {
-                    "type": "string",
-                    "description": "The name of the product"
-                  },
-                  "description": {
-                    "type": "string",
-                    "description": "The description of the product"
-                  },
-                  "attributes": {
-                    "type": "array",
-                    "description": "The attributes of the product",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "attribute_id": { "type": "string" },
-                        "attribute_value": { "type": "string" }
-                      }
-                    }
-                  }
-                },
-                "required": ["product_name", "description"]
+                "$ref": "#/components/schemas/CreateProductRequestBody"
               }
             }
           }
@@ -787,7 +765,7 @@
           }
         }
       },
-      "put": {
+      "patch": {
         "summary": "Update a product",
         "description": "Updates a product in the system.",
         "operationId": "updateProduct",
@@ -830,6 +808,157 @@
           "404": {
             "$ref": "#/components/responses/ErrorResponse",
             "description": "Product not found"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a product",
+        "description": "Deletes a product in the system.",
+        "operationId": "deleteProduct",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "description": "The unique identifier for the product",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product deleted successfully"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Product not found"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/products/{product_id}/attributes": {
+      "post": {
+        "summary": "Add an attribute to a product",
+        "description": "Adds an attribute to a product in the system.",
+        "operationId": "addProductAttribute",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "description": "The unique identifier for the product",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddProductAttributeRequestBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Attribute added to product successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductAttributeLookup"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Bad request - missing or invalid data"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Product not found"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/products/{product_id}/attributes/{attribute_id}": {
+      "patch": {
+        "summary": "Update an attribute for a product",
+        "description": "Updates an attribute for a product in the system.",
+        "operationId": "updateProductAttribute",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "description": "The unique identifier for the product",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "attribute_id",
+            "in": "path",
+            "description": "The unique identifier for the attribute",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "product_attribute_lookup_id",
+            "in": "query",
+            "description": "The unique identifier for the product attribute lookup association",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProductAttributeRequestBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Attribute updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductAttributeLookup"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Bad request - missing or invalid data"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Product or attribute not found"
           },
           "500": {
             "$ref": "#/components/responses/ErrorResponse",
@@ -1073,6 +1202,11 @@
             "description": "The name of the attribute",
             "type": "string"
           },
+          "attribute_description": {
+            "description": "The description of the attribute",
+            "type": "string",
+            "nullable": true
+          },
           "attribute_type": {
             "description": "The type of the attribute",
             "type": "string",
@@ -1093,7 +1227,8 @@
           },
           "created_by": {
             "description": "The unique ID of the user that created the attribute",
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "updated_at": {
             "description": "The date and time the attribute was last updated",
@@ -1102,7 +1237,8 @@
           },
           "updated_by": {
             "description": "The unique ID of the user that last updated the attribute",
-            "type": "string"
+            "type": "string",
+            "nullable": true
           }
         }
       },
@@ -1140,6 +1276,11 @@
             "description": "The type of the attribute",
             "type": "string",
             "enum": ["string", "number", "boolean", "date", "datetime"]
+          },
+          "attribute_description": {
+            "description": "The description of the attribute",
+            "type": "string",
+            "nullable": true
           },
           "short_code": {
             "description": "The short code of the attribute, this can be used for HTTP query parameters to dynamically filter products by attribute, should be alphanumeric and unique",
@@ -1187,22 +1328,16 @@
           },
           "product_description": {
             "description": "The description of the product",
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
-          "attributes": {
-            "description": "The attributes of the product",
+          "product_attribute_lookups": {
+            "description": "The attribute values of the product",
             "type": "array",
             "items": {
-              "type": "object",
-              "properties": {
-                "attribute_id": {
-                  "type": "string"
-                },
-                "attribute_value": {
-                  "type": "string"
-                }
-              }
-            }
+              "$ref": "#/components/schemas/ProductAttributeLookup"
+            },
+            "nullable": true
           },
           "created_at": {
             "description": "The date and time the product was created",
@@ -1211,7 +1346,8 @@
           },
           "created_by": {
             "description": "The unique ID of the user that created the product",
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "updated_at": {
             "description": "The date and time the product was last updated",
@@ -1220,11 +1356,12 @@
           },
           "updated_by": {
             "description": "The unique ID of the user that last updated the product",
-            "type": "string"
+            "type": "string",
+            "nullable": true
           }
         }
       },
-      "UpdateProductRequestBody": {
+      "CreateProductRequestBody": {
         "type": "object",
         "properties": {
           "product_name": {
@@ -1235,23 +1372,9 @@
             "description": "The description of the product",
             "type": "string",
             "nullable": true
-          },
-          "attributes": {
-            "description": "The attributes of the product",
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "attribute_id": {
-                  "type": "string"
-                },
-                "attribute_value": {
-                  "type": "string"
-                }
-              }
-            }
           }
-        }
+        },
+        "required": ["product_name"]
       },
       "GetProductsResponse": {
         "type": "object",
@@ -1276,6 +1399,82 @@
         },
         "required": ["items", "count", "limit", "offset"]
       },
+      "UpdateProductRequestBody": {
+        "type": "object",
+        "properties": {
+          "product_name": {
+            "description": "The name of the product",
+            "type": "string"
+          },
+          "product_description": {
+            "description": "The description of the product",
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ProductAttributeLookup": {
+        "type": "object",
+        "properties": {
+          "product_attribute_lookup_id": {
+            "type": "string"
+          },
+          "product_id": {
+            "type": "string"
+          },
+          "attribute_id": {
+            "type": "string"
+          },
+          "attribute_value": {
+            "type": "string",
+            "description": "The (string-safe) value of the attribute"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "created_by": {
+            "type": "string",
+            "nullable": true
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_by": {
+            "type": "string",
+            "nullable": true
+          },
+          "attribute": {
+            "$ref": "#/components/schemas/Attribute"
+          }
+        }
+      },
+      "AddProductAttributeRequestBody": {
+        "type": "object",
+        "properties": {
+          "attribute_id": {
+            "description": "The unique identifier for the attribute",
+            "type": "string"
+          },
+          "attribute_value": {
+            "description": "The value of the attribute",
+            "type": "string"
+          }
+        },
+        "required": ["attribute_id", "attribute_value"]
+      },
+      "UpdateProductAttributeRequestBody": {
+        "type": "object",
+        "properties": {
+          "attribute_value": {
+            "description": "The value of the attribute",
+            "type": "string"
+          }
+        },
+        "required": ["attribute_value"]
+      },
+
       "ErrorResponse": {
         "type": "object",
         "properties": {
