@@ -1,0 +1,24 @@
+diff --git a/node_modules/@mui/x-data-grid/components/index.d.ts b/node_modules/@mui/x-data-grid/components/index.d.ts
+index 95aad35..d50c923 100644
+--- a/node_modules/@mui/x-data-grid/components/index.d.ts
++++ b/node_modules/@mui/x-data-grid/components/index.d.ts
+@@ -13,6 +13,7 @@ export * from './GridFooter';
+ export * from './GridHeader';
+ export * from './GridLoadingOverlay';
+ export * from './GridNoRowsOverlay';
++export * from './GridNoResultsOverlay';
+ export { GridPagination } from './GridPagination';
+ export * from './GridRowCount';
+ export * from './GridRow';
+diff --git a/node_modules/@mui/x-data-grid/components/index.js b/node_modules/@mui/x-data-grid/components/index.js
+index 9647f8f..6b2077a 100644
+--- a/node_modules/@mui/x-data-grid/components/index.js
++++ b/node_modules/@mui/x-data-grid/components/index.js
+@@ -13,6 +13,7 @@ export * from "./GridFooter.js";
+ export * from "./GridHeader.js";
+ export * from "./GridLoadingOverlay.js";
+ export * from "./GridNoRowsOverlay.js";
++export * from "./GridNoResultsOverlay.js";
+ export { GridPagination } from "./GridPagination.js";
+ export * from "./GridRowCount.js";
+ export * from "./GridRow.js";

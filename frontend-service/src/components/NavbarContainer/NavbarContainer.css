@@ -1,0 +1,10 @@
+.navbar-container {
+  z-index: 1000; /* Keeps NavBar in view when scrolling */
+  top: 0;
+  display: flex;
+  background-color: white;
+  align-items: center;
+  justify-content: space-between;
+  height: 66px;
+  border-bottom: 1px solid #eaecf0;
+}

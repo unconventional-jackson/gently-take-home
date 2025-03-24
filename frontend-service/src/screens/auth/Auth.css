@@ -1,0 +1,35 @@
+.Auth-link-centered {
+  font-weight: 500;
+  font-size: 0.8rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+.Auth-password-requirement-container {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  align-items: center;
+}
+
+.Auth-password-requirement {
+  margin-top: 4px;
+  margin-bottom: 4px;
+  margin-left: 8px;
+  padding: 0;
+  font-size: 12px;
+  line-height: 12px;
+  color: var(--text-secondary);
+}
+
+.Auth-incomplete {
+  /* height: */
+  font-size: 12px;
+  width: 16px;
+  color: var(--color-danger-primary);
+}
+
+.Auth-complete {
+  font-size: 12px;
+  width: 16px;
+  color: var(--color-success-primary);
+}
