@@ -28,3 +28,18 @@ The project is a simple product catalog with a backend API and a frontend UI.
 4. **Manually** create NS records for the `dev` hosted zone in the `prod` workload TLD hosted zone.
 5. Note, an existing VPC was already present in these workload accounts. It is reused rather than recreated for this project to mitigate costs.
 6. Deploy infrastructure using CDK / CloudFormation.
+
+## Tech Stack
+
+- AWS (infrastructure)
+- Node.js (backend)
+- React (frontend)
+- PostgreSQL (database)
+- Sequelize (ORM)
+- Docker (local development + deployment)
+- CDK (infrastructure-as-code)
+- Vite (frontend)
+- Supertest (end-to-end testing)
+- Jest (unit / end-to-end testing)
+- New Relic (logging, production)
+- SendGrid (email)

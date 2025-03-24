@@ -27,7 +27,7 @@
     "@sequelize/mssql": "^7.0.0-alpha.41",
     "@sequelize/postgres": "^7.0.0-alpha.43",
     "@unconventional-code/observability-sdk": "^0.0.38",
-    "@unconventional-jackson/gently-common-service": "^0.0.2",
+    "@unconventional-jackson/gently-common-service": "^0.0.4",
     "@unconventional-jackson/gently-database-service": "^1.0.9",
     "@unconventional-jackson/gently-openapi-service": "^0.0.7",
     "axios": "^1.6.2",

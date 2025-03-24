@@ -42,7 +42,7 @@
   "version": "1.0.9",
   "dependencies": {
     "@aws-sdk/rds-signer": "^3.772.0",
-    "@unconventional-jackson/gently-common-service": "^0.0.2",
+    "@unconventional-jackson/gently-common-service": "^0.0.4",
     "bcrypt": "^5.1.1",
     "cross-env": "^7.0.3",
     "speakeasy": "^2.0.0"

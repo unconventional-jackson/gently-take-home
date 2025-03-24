@@ -36,7 +36,7 @@ export class CertificatesStack extends cdk.Stack {
      * Create a certificate for the frontend
      */
     this.frontendCertificate = new acm.Certificate(this, `${stage}-gently-frontend-certificate`, {
-      domainName: `${stage}.gentlytakehome.com`,
+      domainName: stage === 'prod' ? 'gentlytakehome.com' : `${stage}.gentlytakehome.com`,
       certificateName: `${stage}-gently-frontend-certificate`,
       validation: acm.CertificateValidation.fromDns(zone),
     });

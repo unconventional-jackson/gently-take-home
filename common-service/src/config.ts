@@ -149,6 +149,22 @@ export async function getConfig(): Promise<IConfig> {
       throw new Error("Missing environment variable SERVICE");
     }
 
+    if (
+      "LOGGING_NEW_RELIC_ENABLED" in secrets &&
+      secrets.LOGGING_NEW_RELIC_ENABLED === "true"
+    ) {
+      process.env.LOGGING_NEW_RELIC_ENABLED = "true";
+      if (
+        !("NEW_RELIC_API_KEY" in secrets) ||
+        typeof secrets.NEW_RELIC_API_KEY !== "string"
+      ) {
+        throw new Error("Missing environment variable NEW_RELIC_API_KEY");
+      }
+      // eslint-disable-next-line no-console
+      console.log("Setting NEW_RELIC_API_KEY to enable NR Logging");
+      process.env.NEW_RELIC_API_KEY = secrets.NEW_RELIC_API_KEY;
+    }
+
     config = {
       AWS_REGION: secrets.AWS_REGION,
       POSTGRES_HOST: secrets.POSTGRES_HOST,

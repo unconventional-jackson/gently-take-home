@@ -10,7 +10,7 @@
   "name": "@unconventional-jackson/gently-common-service",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "private": false,
   "dependencies": {
     "@aws-sdk/client-secrets-manager": "^3.772.0",

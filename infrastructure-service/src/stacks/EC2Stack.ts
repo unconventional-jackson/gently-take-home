@@ -199,7 +199,7 @@ export class EC2Stack extends cdk.Stack {
     );
 
     const instance = new ec2.Instance(this, `${stage}-gently-instance`, {
-      instanceType: ec2.InstanceType.of(ec2.InstanceClass.T3A, ec2.InstanceSize.SMALL),
+      instanceType: ec2.InstanceType.of(ec2.InstanceClass.T3A, ec2.InstanceSize.MEDIUM),
       machineImage: ec2.MachineImage.genericLinux({ 'us-east-1': ubuntu2404AmiId }),
       allowAllOutbound: true,
       instanceName: `${stage}-gently-instance`,
@@ -316,7 +316,7 @@ export class EC2Stack extends cdk.Stack {
     new route53.ARecord(this, `${stage}-gently-frontend-alias-record`, {
       zone,
       target: route53.RecordTarget.fromAlias(new route53Targets.LoadBalancerTarget(alb)),
-      recordName: `${stage}.gentlytakehome.com`,
+      recordName: stage === 'prod' ? 'gentlytakehome.com' : `${stage}.gentlytakehome.com`,
     });
 
     new cdk.CfnOutput(this, `${stage}-gently-instance-private-ip`, {
