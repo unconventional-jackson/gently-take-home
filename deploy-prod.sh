@@ -56,6 +56,7 @@ scp ./docker-compose.prod.yml $SSH_PROFILE:/home/ubuntu/gently/docker-compose.pr
 
 
 ssh $SSH_PROFILE << EOF
+  mkdir -p gently
   cd gently
   aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$BACKEND_IMAGE_NAME
   aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$FRONTEND_IMAGE_NAME

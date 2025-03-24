@@ -294,11 +294,15 @@ export class EC2Stack extends cdk.Stack {
      */
     httpsListener.addTargets(`${stage}-frontend-rule`, {
       priority: 2,
-      conditions: [elbv2.ListenerCondition.hostHeaders([`${stage}.gentlytakehome.com`])],
+      conditions: [
+        elbv2.ListenerCondition.hostHeaders([
+          stage === 'prod' ? 'gentlytakehome.com' : `${stage}.gentlytakehome.com`,
+        ]),
+      ],
       port: 80,
       protocol: elbv2.ApplicationProtocol.HTTP,
       targets: [new targets.InstanceTarget(instance)],
-      targetGroupName: `${stage}-gently-frontend-target-group`,
+      targetGroupName: `${stage}-gently-frontend-target-group`.slice(0, 32),
     });
 
     /**
