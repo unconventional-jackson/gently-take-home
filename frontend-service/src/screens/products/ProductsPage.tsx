@@ -22,7 +22,6 @@ import { toast } from 'react-toastify';
 
 import { useSdk } from '../../api/sdk';
 import { CustomButton } from '../../components/Button/Button';
-import { CustomInput } from '../../components/Custom/Input';
 import { StyledDataGrid } from '../../components/DataGrid';
 import { MainContent } from '../../components/MainContent/MainContent';
 import { PageLayout } from '../../components/PageLayout/PageLayout';
@@ -45,11 +44,6 @@ export function ProductsPage() {
 
   const [offset, setOffset] = useState<number>(0);
   const [limit, setLimit] = useState<number>(10);
-
-  const [searchTerm, setSearchTerm] = useState<string>('');
-  const handleChangeSearchTerm = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-  }, []);
 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -234,16 +228,6 @@ export function ProductsPage() {
         <Container>
           <Box p={3} padding={5}>
             <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <CustomInput
-                  label="Search"
-                  variant="outlined"
-                  placeholder="Search by product name..."
-                  fullWidth
-                  value={searchTerm}
-                  onChange={handleChangeSearchTerm}
-                />
-              </Grid>
               <Grid item xs={12} style={{ height: 600 }}>
                 <StyledDataGrid
                   rows={rows}
