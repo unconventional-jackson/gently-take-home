@@ -498,6 +498,15 @@
               "type": "integer",
               "default": 10
             }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "A search term to filter attributes by",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -845,7 +854,7 @@
         }
       }
     },
-    "/products/{product_id}/attributes": {
+    "/products/{product_id}/attributes/{attribute_id}": {
       "post": {
         "summary": "Add an attribute to a product",
         "description": "Adds an attribute to a product in the system.",
@@ -855,6 +864,15 @@
             "name": "product_id",
             "in": "path",
             "description": "The unique identifier for the product",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "attribute_id",
+            "in": "path",
+            "description": "The unique identifier for the attribute",
             "required": true,
             "schema": {
               "type": "string"
@@ -895,9 +913,7 @@
             "description": "Internal server error"
           }
         }
-      }
-    },
-    "/products/{product_id}/attributes/{attribute_id}": {
+      },
       "patch": {
         "summary": "Update an attribute for a product",
         "description": "Updates an attribute for a product in the system.",
@@ -955,6 +971,55 @@
           "400": {
             "$ref": "#/components/responses/ErrorResponse",
             "description": "Bad request - missing or invalid data"
+          },
+          "404": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Product or attribute not found"
+          },
+          "500": {
+            "$ref": "#/components/responses/ErrorResponse",
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/products/{product_id}/attributes/{attribute_id}/{product_attribute_lookup_id}": {
+      "delete": {
+        "summary": "Delete an attribute for a product",
+        "description": "Deletes an attribute for a product in the system.",
+        "operationId": "deleteProductAttribute",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "description": "The unique identifier for the product",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "attribute_id",
+            "in": "path",
+            "description": "The unique identifier for the attribute",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "product_attribute_lookup_id",
+            "in": "path",
+            "description": "The unique identifier for the product attribute lookup association",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Attribute deleted successfully"
           },
           "404": {
             "$ref": "#/components/responses/ErrorResponse",

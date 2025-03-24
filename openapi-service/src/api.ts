@@ -588,7 +588,7 @@ export interface ProductAttributeLookup {
      */
     'attribute_id'?: string;
     /**
-     * 
+     * The (string-safe) value of the attribute
      * @type {string}
      * @memberof ProductAttributeLookup
      */
@@ -827,17 +827,21 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * Adds an attribute to a product in the system.
          * @summary Add an attribute to a product
          * @param {string} productId The unique identifier for the product
+         * @param {string} attributeId The unique identifier for the attribute
          * @param {AddProductAttributeRequestBody} addProductAttributeRequestBody 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        addProductAttribute: async (productId: string, addProductAttributeRequestBody: AddProductAttributeRequestBody, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        addProductAttribute: async (productId: string, attributeId: string, addProductAttributeRequestBody: AddProductAttributeRequestBody, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'productId' is not null or undefined
             assertParamExists('addProductAttribute', 'productId', productId)
+            // verify required parameter 'attributeId' is not null or undefined
+            assertParamExists('addProductAttribute', 'attributeId', attributeId)
             // verify required parameter 'addProductAttributeRequestBody' is not null or undefined
             assertParamExists('addProductAttribute', 'addProductAttributeRequestBody', addProductAttributeRequestBody)
-            const localVarPath = `/products/{product_id}/attributes`
-                .replace(`{${"product_id"}}`, encodeURIComponent(String(productId)));
+            const localVarPath = `/products/{product_id}/attributes/{attribute_id}`
+                .replace(`{${"product_id"}}`, encodeURIComponent(String(productId)))
+                .replace(`{${"attribute_id"}}`, encodeURIComponent(String(attributeId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1040,6 +1044,48 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
+         * Deletes an attribute for a product in the system.
+         * @summary Delete an attribute for a product
+         * @param {string} productId The unique identifier for the product
+         * @param {string} attributeId The unique identifier for the attribute
+         * @param {string} productAttributeLookupId The unique identifier for the product attribute lookup association
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteProductAttribute: async (productId: string, attributeId: string, productAttributeLookupId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'productId' is not null or undefined
+            assertParamExists('deleteProductAttribute', 'productId', productId)
+            // verify required parameter 'attributeId' is not null or undefined
+            assertParamExists('deleteProductAttribute', 'attributeId', attributeId)
+            // verify required parameter 'productAttributeLookupId' is not null or undefined
+            assertParamExists('deleteProductAttribute', 'productAttributeLookupId', productAttributeLookupId)
+            const localVarPath = `/products/{product_id}/attributes/{attribute_id}/{product_attribute_lookup_id}`
+                .replace(`{${"product_id"}}`, encodeURIComponent(String(productId)))
+                .replace(`{${"attribute_id"}}`, encodeURIComponent(String(attributeId)))
+                .replace(`{${"product_attribute_lookup_id"}}`, encodeURIComponent(String(productAttributeLookupId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Sends a password reset token to the user\'s email if the email is registered.
          * @summary Request password reset token
          * @param {AuthForgotPasswordRequestBody} authForgotPasswordRequestBody 
@@ -1080,10 +1126,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @summary Get all attributes
          * @param {number} [offset] The offset of the database cursor when fetching paginated attributes
          * @param {number} [limit] The number of items to retrieve
+         * @param {string} [search] A search term to filter attributes by
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAttributes: async (offset?: number, limit?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getAttributes: async (offset?: number, limit?: number, search?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/attributes`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1102,6 +1149,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
 
             if (limit !== undefined) {
                 localVarQueryParameter['limit'] = limit;
+            }
+
+            if (search !== undefined) {
+                localVarQueryParameter['search'] = search;
             }
 
 
@@ -1468,7 +1519,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -1508,7 +1559,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -1555,7 +1606,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -1627,12 +1678,13 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * Adds an attribute to a product in the system.
          * @summary Add an attribute to a product
          * @param {string} productId The unique identifier for the product
+         * @param {string} attributeId The unique identifier for the attribute
          * @param {AddProductAttributeRequestBody} addProductAttributeRequestBody 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async addProductAttribute(productId: string, addProductAttributeRequestBody: AddProductAttributeRequestBody, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProductAttributeLookup>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.addProductAttribute(productId, addProductAttributeRequestBody, options);
+        async addProductAttribute(productId: string, attributeId: string, addProductAttributeRequestBody: AddProductAttributeRequestBody, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ProductAttributeLookup>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.addProductAttribute(productId, attributeId, addProductAttributeRequestBody, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.addProductAttribute']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -1703,6 +1755,21 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Deletes an attribute for a product in the system.
+         * @summary Delete an attribute for a product
+         * @param {string} productId The unique identifier for the product
+         * @param {string} attributeId The unique identifier for the attribute
+         * @param {string} productAttributeLookupId The unique identifier for the product attribute lookup association
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteProductAttribute(productId: string, attributeId: string, productAttributeLookupId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteProductAttribute(productId, attributeId, productAttributeLookupId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.deleteProductAttribute']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Sends a password reset token to the user\'s email if the email is registered.
          * @summary Request password reset token
          * @param {AuthForgotPasswordRequestBody} authForgotPasswordRequestBody 
@@ -1720,11 +1787,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @summary Get all attributes
          * @param {number} [offset] The offset of the database cursor when fetching paginated attributes
          * @param {number} [limit] The number of items to retrieve
+         * @param {string} [search] A search term to filter attributes by
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAttributes(offset?: number, limit?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetAttributesResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getAttributes(offset, limit, options);
+        async getAttributes(offset?: number, limit?: number, search?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetAttributesResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAttributes(offset, limit, search, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.getAttributes']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -1919,12 +1987,13 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * Adds an attribute to a product in the system.
          * @summary Add an attribute to a product
          * @param {string} productId The unique identifier for the product
+         * @param {string} attributeId The unique identifier for the attribute
          * @param {AddProductAttributeRequestBody} addProductAttributeRequestBody 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        addProductAttribute(productId: string, addProductAttributeRequestBody: AddProductAttributeRequestBody, options?: RawAxiosRequestConfig): AxiosPromise<ProductAttributeLookup> {
-            return localVarFp.addProductAttribute(productId, addProductAttributeRequestBody, options).then((request) => request(axios, basePath));
+        addProductAttribute(productId: string, attributeId: string, addProductAttributeRequestBody: AddProductAttributeRequestBody, options?: RawAxiosRequestConfig): AxiosPromise<ProductAttributeLookup> {
+            return localVarFp.addProductAttribute(productId, attributeId, addProductAttributeRequestBody, options).then((request) => request(axios, basePath));
         },
         /**
          * Changes a user\'s password by verifying the current password.
@@ -1977,6 +2046,18 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.deleteProduct(productId, options).then((request) => request(axios, basePath));
         },
         /**
+         * Deletes an attribute for a product in the system.
+         * @summary Delete an attribute for a product
+         * @param {string} productId The unique identifier for the product
+         * @param {string} attributeId The unique identifier for the attribute
+         * @param {string} productAttributeLookupId The unique identifier for the product attribute lookup association
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteProductAttribute(productId: string, attributeId: string, productAttributeLookupId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.deleteProductAttribute(productId, attributeId, productAttributeLookupId, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Sends a password reset token to the user\'s email if the email is registered.
          * @summary Request password reset token
          * @param {AuthForgotPasswordRequestBody} authForgotPasswordRequestBody 
@@ -1991,11 +2072,12 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @summary Get all attributes
          * @param {number} [offset] The offset of the database cursor when fetching paginated attributes
          * @param {number} [limit] The number of items to retrieve
+         * @param {string} [search] A search term to filter attributes by
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAttributes(offset?: number, limit?: number, options?: RawAxiosRequestConfig): AxiosPromise<GetAttributesResponse> {
-            return localVarFp.getAttributes(offset, limit, options).then((request) => request(axios, basePath));
+        getAttributes(offset?: number, limit?: number, search?: string, options?: RawAxiosRequestConfig): AxiosPromise<GetAttributesResponse> {
+            return localVarFp.getAttributes(offset, limit, search, options).then((request) => request(axios, basePath));
         },
         /**
          * Retrieves a product in the system.
@@ -2148,13 +2230,14 @@ export class DefaultApi extends BaseAPI {
      * Adds an attribute to a product in the system.
      * @summary Add an attribute to a product
      * @param {string} productId The unique identifier for the product
+     * @param {string} attributeId The unique identifier for the attribute
      * @param {AddProductAttributeRequestBody} addProductAttributeRequestBody 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public addProductAttribute(productId: string, addProductAttributeRequestBody: AddProductAttributeRequestBody, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).addProductAttribute(productId, addProductAttributeRequestBody, options).then((request) => request(this.axios, this.basePath));
+    public addProductAttribute(productId: string, attributeId: string, addProductAttributeRequestBody: AddProductAttributeRequestBody, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).addProductAttribute(productId, attributeId, addProductAttributeRequestBody, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2218,6 +2301,20 @@ export class DefaultApi extends BaseAPI {
     }
 
     /**
+     * Deletes an attribute for a product in the system.
+     * @summary Delete an attribute for a product
+     * @param {string} productId The unique identifier for the product
+     * @param {string} attributeId The unique identifier for the attribute
+     * @param {string} productAttributeLookupId The unique identifier for the product attribute lookup association
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public deleteProductAttribute(productId: string, attributeId: string, productAttributeLookupId: string, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).deleteProductAttribute(productId, attributeId, productAttributeLookupId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Sends a password reset token to the user\'s email if the email is registered.
      * @summary Request password reset token
      * @param {AuthForgotPasswordRequestBody} authForgotPasswordRequestBody 
@@ -2234,12 +2331,13 @@ export class DefaultApi extends BaseAPI {
      * @summary Get all attributes
      * @param {number} [offset] The offset of the database cursor when fetching paginated attributes
      * @param {number} [limit] The number of items to retrieve
+     * @param {string} [search] A search term to filter attributes by
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public getAttributes(offset?: number, limit?: number, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).getAttributes(offset, limit, options).then((request) => request(this.axios, this.basePath));
+    public getAttributes(offset?: number, limit?: number, search?: string, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).getAttributes(offset, limit, search, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
