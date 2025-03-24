@@ -19,12 +19,14 @@ function checkAllowedOrigins(config: IConfig, origin: string | undefined): boole
   let origins: RegExp[] = [];
   if (config.ENV === 'local') {
     origins = [
+      /^http:\/\/localhost/, // allow localhost for testing on local machine
       /^http:\/\/localhost:\d+$/, // allow localhost for testing on local machine
       /^http:\/\/10\.0\.0\.\d+:\d+$/, // allow 10.0.0.x for testing on mobile on local network
       /^http:\/\/192\.168\.1\.\d+:\d+$/, // allow 192.168.1.x for testing on mobile on local network
     ];
   } else if (config.ENV === 'dev') {
     origins = [
+      /^http:\/\/localhost/, // allow localhost for testing on local machine
       /^http:\/\/localhost:\d+$/, // allow localhost for testing on local machine
       /^http:\/\/10\.0\.0\.\d+:\d+$/, // allow 10.0.0.x for testing on mobile on local network
       /^http:\/\/192\.168\.1\.\d+:\d+$/, // allow 192.168.1.x for testing on mobile on local network

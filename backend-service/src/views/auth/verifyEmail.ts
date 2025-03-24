@@ -60,7 +60,7 @@ export async function verifyEmail(
       user_id: user.user_id,
       email: user.email,
       auth_email_verified: user.auth_email_verified,
-      // auth_totp_enabled: user.auth_totp_enabled,
+      auth_totp_enabled: user.auth_totp_enabled,
       auth_totp_verified_at: user?.auth_totp_verified_at?.toISOString() || null,
     };
 

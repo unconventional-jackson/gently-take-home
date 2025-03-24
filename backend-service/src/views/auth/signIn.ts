@@ -119,7 +119,7 @@ export async function signIn(
       refresh_token: refreshToken,
       auth_email_verified: user.auth_email_verified,
       auth_totp_verified_at: user.auth_totp_verified_at?.toISOString() || null,
-      // auth_totp_enabled: user.auth_totp_enabled,
+      auth_totp_enabled: user.auth_totp_enabled,
     };
 
     res.status(200).json({

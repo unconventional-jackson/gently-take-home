@@ -10,6 +10,7 @@ import { deleteAttribute } from './deleteAttribute';
 import { deleteProduct } from './deleteProduct';
 import { deleteProductAttribute } from './deleteProductAttribute';
 import { getAttributes } from './getAttributes';
+import { getProduct } from './getProduct';
 import { getProducts } from './getProducts';
 import { updateProduct } from './updateProduct';
 import { updateProductAttribute } from './updateProductAttribute';
@@ -30,7 +31,7 @@ routes.use(expressAsyncHandler(ensureToken));
 // Protected routes
 routes.post('/products', expressAsyncHandler(createProduct));
 routes.get('/products', expressAsyncHandler(getProducts));
-// routes.get('/products/:product_id', expressAsyncHandler(getProduct));
+routes.get('/products/:product_id', expressAsyncHandler(getProduct));
 routes.patch('/products/:product_id', expressAsyncHandler(updateProduct));
 routes.delete('/products/:product_id', expressAsyncHandler(deleteProduct));
 // routes.get('/products/:product_id/attributes', expressAsyncHandler(getProductAttributes));

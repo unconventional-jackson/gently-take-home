@@ -1,3 +1,4 @@
+import { Op } from '@sequelize/core';
 import { NodeLogger } from '@unconventional-code/observability-sdk';
 import { AttributeModel } from '@unconventional-jackson/gently-database-service';
 import {
@@ -9,6 +10,7 @@ import { Request, Response } from 'express';
 type GetAttributesQuery = {
   limit?: number;
   offset?: number;
+  search?: string;
 };
 
 export async function getAttributes(
@@ -23,10 +25,20 @@ export async function getAttributes(
   try {
     const limit = req.query.limit ? Number(req.query.limit) : 10;
     const offset = req.query.offset ? Number(req.query.offset) : 0;
+    const search = req.query.search ? String(req.query.search) : undefined;
     const { rows, count } = await AttributeModel.findAndCountAll({
       limit: limit,
       offset: offset,
       order: [['created_at', 'DESC']],
+      ...(search
+        ? {
+            where: {
+              attribute_name: {
+                [Op.iLike]: `%${search}%`,
+              },
+            },
+          }
+        : {}),
     });
 
     res.status(200).json({

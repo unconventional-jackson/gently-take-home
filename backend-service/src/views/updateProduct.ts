@@ -1,4 +1,4 @@
-import { ModelAttributes } from '@sequelize/core';
+import { UpdateValues } from '@sequelize/core';
 import { NodeLogger } from '@unconventional-code/observability-sdk';
 import { ProductId, ProductModel } from '@unconventional-jackson/gently-database-service';
 import {
@@ -52,7 +52,9 @@ export async function updateProduct(
     }
 
     log.info('Updating product');
-    const updates: ModelAttributes<ProductModel> = {};
+    const updates: UpdateValues<ProductModel> = {
+      updated_by: res.locals.user_id,
+    };
 
     if (req.body.product_name) {
       updates.product_name = req.body.product_name;

@@ -124,6 +124,7 @@ export async function updateProductAttribute(
         value_string: null,
         value_number: null,
         value_date: null,
+        updated_by: res.locals.user_id,
       });
     }
 
@@ -135,6 +136,7 @@ export async function updateProductAttribute(
         value_string: attribute_value,
         value_number: null,
         value_date: null,
+        updated_by: res.locals.user_id,
       });
     }
 
@@ -153,6 +155,7 @@ export async function updateProductAttribute(
         value_string: null,
         value_number: Number(attribute_value),
         value_date: null,
+        updated_by: res.locals.user_id,
       });
     }
 
@@ -172,6 +175,7 @@ export async function updateProductAttribute(
         value_string: null,
         value_number: null,
         value_date: new Date(attribute_value),
+        updated_by: res.locals.user_id,
       });
     }
 

@@ -101,6 +101,8 @@ export async function addProductAttribute(
         product_id,
         attribute_id: attributeDefinition.attribute_id,
         value_boolean: attributeBooleanValue,
+        created_by: res.locals.user_id,
+        updated_by: res.locals.user_id,
       });
     }
 
@@ -110,6 +112,8 @@ export async function addProductAttribute(
         product_id,
         attribute_id: attributeDefinition.attribute_id,
         value_string: attribute_value,
+        created_by: res.locals.user_id,
+        updated_by: res.locals.user_id,
       });
     }
 
@@ -126,6 +130,8 @@ export async function addProductAttribute(
         product_id,
         attribute_id: attributeDefinition.attribute_id,
         value_number: Number(attribute_value),
+        created_by: res.locals.user_id,
+        updated_by: res.locals.user_id,
       });
     }
 
@@ -143,6 +149,8 @@ export async function addProductAttribute(
         product_id,
         attribute_id: attributeDefinition.attribute_id,
         value_date: new Date(attribute_value),
+        created_by: res.locals.user_id,
+        updated_by: res.locals.user_id,
       });
     }
 

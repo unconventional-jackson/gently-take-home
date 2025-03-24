@@ -57,12 +57,12 @@ export async function totpVerify(
       return;
     }
 
-    // if (!user?.auth_totp_enabled) {
-    //   log.info('Enabling TOTP for user', { user_id: user.user_id });
-    //   await user.update({
-    //     auth_totp_enabled: true,
-    //   });
-    // }
+    if (!user?.auth_totp_enabled) {
+      log.info('Enabling TOTP for user', { user_id: user.user_id });
+      await user.update({
+        auth_totp_enabled: true,
+      });
+    }
 
     await user.update({
       auth_totp_verified_at: new Date(),
@@ -92,7 +92,7 @@ export async function totpVerify(
       refresh_token: refreshToken,
       auth_email_verified: user.auth_email_verified,
       auth_totp_verified_at: user.auth_totp_verified_at?.toISOString() || null,
-      // auth_totp_enabled: user.auth_totp_enabled,
+      auth_totp_enabled: user.auth_totp_enabled,
     };
 
     res.status(200).json({

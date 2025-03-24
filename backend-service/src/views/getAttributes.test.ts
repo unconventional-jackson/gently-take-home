@@ -161,6 +161,28 @@ describe('GET /attributes', () => {
         expect(secondPageAttributeIds).toEqual(expect.arrayContaining(attribute_ids.slice(5, 10)));
       });
     });
+
+    describe('when a search term is provided', () => {
+      it('returns the attributes that match the search term', async () => {
+        // Create an attribute
+        const attribute_name = getAttributeName();
+        await request(app).post('/attributes').set('Authorization', `Bearer ${access_token}`).send({
+          attribute_name,
+          attribute_type: AttributeType.STRING,
+          short_code: getShortCode(),
+          is_required: true,
+        });
+
+        const response = await request(app)
+          .get(`/attributes?search=${attribute_name}`)
+          .set('Authorization', `Bearer ${access_token}`)
+          .send();
+        const getAttributesResponseBody = response.body as GetAttributesResponse;
+        expect(response.status).toBe(200);
+        expect(getAttributesResponseBody.items.length).toBe(1);
+        expect(getAttributesResponseBody.items[0].attribute_name).toBe(attribute_name);
+      });
+    });
   });
 
   describe('failure cases', () => {

@@ -27,6 +27,8 @@ export async function createProduct(
     const createdProduct = await ProductModel.create({
       product_name: req.body.product_name,
       product_description: req.body.product_description,
+      created_by: res.locals.user_id,
+      updated_by: res.locals.user_id,
     });
 
     res.status(201).json({

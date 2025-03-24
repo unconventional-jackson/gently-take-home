@@ -30,6 +30,6 @@ export async function sendSendGridEmail({ to, subject, body, correlation }: Send
     log.error(error, {
       detail: 'Failed to send email with SendGrid',
     });
-    // Not going to throw right now
+    throw error;
   }
 }

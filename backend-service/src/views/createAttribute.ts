@@ -67,6 +67,8 @@ export async function createAttribute(
       short_code: req.body.short_code,
       is_required: req.body.is_required,
       attribute_description: req.body.attribute_description || null,
+      created_by: res.locals.user_id,
+      updated_by: res.locals.user_id,
     });
 
     res.status(201).json({
