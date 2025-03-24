@@ -38,6 +38,7 @@ function checkAllowedOrigins(config: IConfig, origin: string | undefined): boole
       // disallow localhost / 10.0.0.x / 192.168.1.x in production
       /^https:\/\/api\.prod\.gentlytakehome\.com$/,
       /^https:\/\/prod\.gentlytakehome\.com$/,
+      /^https:\/\/gentlytakehome\.com$/,
     ];
   }
 
