@@ -1,12 +1,13 @@
 FROM --platform=linux/amd64 node:22.12-alpine as builder
 
 WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm ci --verbose
+COPY package.json ./
+COPY tsconfig.json ./
+RUN npm install --verbose
 
-COPY . .
-
-RUN npm run build
+# No need to copy the source code here since we're mounting the source code from the host
+# Copy the source code from the host -> solved by volume mounting in docker-compose.yml
+# COPY . .
 
 EXPOSE 4000
 

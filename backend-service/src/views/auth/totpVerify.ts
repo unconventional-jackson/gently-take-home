@@ -85,6 +85,13 @@ export async function totpVerify(
       expiresIn: REFRESH_TOKEN_TIMEOUT,
     });
 
+    log.info('Updating user refresh token', {
+      userId: user.user_id,
+    });
+    await user.update({
+      auth_refresh_token: refreshToken,
+    });
+
     const authUser: AuthUser = {
       email: user.email,
       user_id: user.user_id,

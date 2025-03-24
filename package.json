@@ -1,0 +1,13 @@
+{
+  "name": "@unconventional-jackson/gently-take-home",
+  "scripts": {
+    "down:local": "docker-compose -f docker-compose.local.yml down -v",
+    "start:local": "docker-compose -f docker-compose.local.yml up --build",
+    "down:dev": "docker-compose -f docker-compose.dev.yml down -v",
+    "start:dev": "docker-compose -f docker-compose.dev.yml up --build",
+    "down:prod": "docker-compose -f docker-compose.prod.yml down -v",
+    "start:prod": "docker-compose -f docker-compose.prod.yml up --build",
+    "deploy:dev": "chmod +x ./deploy-dev.sh && ./deploy-dev.sh",
+    "deploy:prod": "chmod +x ./deploy-prod.sh && ./deploy-prod.sh"
+  }
+}

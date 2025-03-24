@@ -1,0 +1,80 @@
+version: "3.9"
+
+services:
+  # Backend service - needs access to AWS credentials (effectively provided by an EC2 IAM profile in development and production environments)
+  gently-backend-service:
+    build:
+      context: ./backend-service
+      dockerfile: Dockerfile.local
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./backend-service/src:/app/src # Mount for hot-reloading
+      # - /app/node_modules # Exclude node_modules from mounting since we build on a mac but the container is linux
+    environment:
+      - NODE_ENV=${NODE_ENV:-development}
+      - ENV=local
+      - AWS_PROFILE
+      - AWS_SESSION_TOKEN
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - LOGGING_CONSOLE_ENABLED=1
+    depends_on:
+      - gently-database-service
+
+  # Frontend service - runs the Vite local dev server internally on port 5173.
+  gently-frontend-service:
+    build:
+      context: ./frontend-service
+      dockerfile: Dockerfile.local
+    ports:
+      - "80:80"
+    volumes:
+      - ./frontend-service/src:/app/src # Mount for hot-reloading
+      # - /app/node_modules # Exclude node_modules from mounting
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+      ENV: local
+
+  gently-database-service:
+    image: postgres:16 # Use the latest stable version or your preferred version
+    ports:
+      - "5432:5432" # Maps PostgreSQL's default port
+    environment:
+      - POSTGRES_USER=local_user
+      - POSTGRES_PASSWORD=YourStrong!Passw0rd
+      - POSTGRES_DB=local_database
+      - LOGGING_CONSOLE_ENABLED=1
+    volumes:
+      - gently-database-service-data:/var/lib/postgresql/data # Persist data locally
+    healthcheck:
+      test:
+        ["CMD-SHELL", "bash -c 'exec 6<>/dev/tcp/localhost/5432 && echo OK'"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # Short-lived migration service to run migrations on the database, then taken down after migrations are complete; AWS credentials must be present in the calling shell environment
+  gently-migration-service:
+    build:
+      context: ./database-service
+      dockerfile: Dockerfile.local
+    environment:
+      - POSTGRES_HOST=gently-database-service
+      - POSTGRES_USER=local_user
+      - POSTGRES_PASSWORD=YourStrong!Passw0rd
+      - POSTGRES_DB=local_database
+      - POSTGRES_PORT=5432
+      - AWS_PROFILE
+      - AWS_SESSION_TOKEN
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - LOGGING_CONSOLE_ENABLED=1
+      - ENV=local
+    depends_on:
+      gently-database-service:
+        condition: service_healthy
+
+volumes:
+  gently-database-service-data:
+    driver: local

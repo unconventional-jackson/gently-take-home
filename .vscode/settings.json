@@ -1,0 +1,19 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.fixAll.eslint": "explicit"
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "eslint.workingDirectories": [
+    "./backend-service",
+    "./common-service",
+    "./database-service",
+    "./frontend-service",
+    "./infrastructure-service",
+    "./openapi-service"
+  ],
+  "files.trimFinalNewlines": true,
+  "files.trimTrailingWhitespace": true
+}

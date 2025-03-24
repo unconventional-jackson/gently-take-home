@@ -1,0 +1,33 @@
+{
+  "devDependencies": {
+    "@types/node": "20.6.3",
+    "@unconventional-code/aws-cdk-lib": "^0.0.81",
+    "@unconventional-code/eslint-config": "^0.0.11",
+    "@unconventional-code/prettier-config": "^0.0.3",
+    "aws-cdk": "2.171.1",
+    "aws-cdk-lib": "2.171.1",
+    "constructs": "^10.0.0",
+    "dotenv": "^16.3.1",
+    "esbuild": "^0.19.4",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "source-map-support": "^0.5.21",
+    "typescript": "~5.2.2"
+  },
+  "eslintConfig": {
+    "extends": "@unconventional-code/eslint-config"
+  },
+  "name": "@unconventional-jackson/gently-infrastructure-service",
+  "prettier": "@unconventional-code/prettier-config",
+  "scripts": {
+    "bootstrap:dev": "ENV=dev cdk bootstrap",
+    "bootstrap:prod": "ENV=prod cdk bootstrap",
+    "deploy:dev": "ENV=dev cdk deploy --all --require-approval never",
+    "deploy:prod": "ENV=prod cdk deploy --all --require-approval never",
+    "lint:check:eslint": "echo \"Not implemented for this service\" && exit 0",
+    "lint:check:prettier": "echo \"Not implemented for this service\" && exit 0",
+    "lint:check:tsc": "echo \"Not implemented for this service\" && exit 0",
+    "lint:fix:prettier": "echo \"Not implemented for this service\" && exit 0",
+    "test:unit": "echo \"Not implemented for this service\" && exit 0"
+  },
+  "version": "1.0.0"
+}

@@ -1,0 +1,57 @@
+version: "3.9"
+
+services:
+  # Backend service - needs access to AWS credentials (effectively provided by an EC2 IAM profile in development and production environments)
+  gently-backend-service:
+    image: $BACKEND_IMAGE_TAG
+    ports:
+      - "4000:4000"
+    environment:
+      - NODE_ENV=${NODE_ENV:-development}
+      - ENV=dev
+      - LOGGING_CONSOLE_ENABLED=1
+      - LOGGING_NEW_RELIC_ENABLED=1
+    depends_on:
+      - gently-database-service
+
+  # Frontend service - runs the Vite dev server internally on port 80.
+  gently-frontend-service:
+    image: $FRONTEND_IMAGE_TAG
+    ports:
+      - "80:80"
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+      ENV: dev
+
+  gently-database-service:
+    image: postgres:16 # Use the latest stable version or your preferred version
+    ports:
+      - "5432:5432" # Maps PostgreSQL's default port
+    environment:
+      - POSTGRES_USER=dev_user
+      - POSTGRES_PASSWORD=YourStrong!Passw0rd
+      - POSTGRES_DB=dev_database
+      - LOGGING_CONSOLE_ENABLED=1
+    volumes:
+      - gently-database-service-data:/var/lib/postgresql/data # Persist data locally
+    healthcheck:
+      test:
+        ["CMD-SHELL", "bash -c 'exec 6<>/dev/tcp/localhost/5432 && echo OK'"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # Short-lived migration service to run migrations on the database, then taken down after migrations are complete; AWS credentials must be present in the calling shell environment
+  gently-migration-service:
+    image: $MIGRATION_IMAGE_TAG
+    environment:
+      - LOGGING_CONSOLE_ENABLED=1
+      - LOGGING_NEW_RELIC_ENABLED=1
+      - ENV=dev
+    depends_on:
+      gently-database-service:
+        condition: service_healthy
+
+volumes:
+  gently-database-service-data:
+    driver: local

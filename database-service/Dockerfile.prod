@@ -1,0 +1,6 @@
+FROM --platform=linux/amd64 node:22.12-alpine as builder
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci --verbose
+COPY . .
+CMD ["npm", "run", "migration:up:prod"]

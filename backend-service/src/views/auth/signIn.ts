@@ -112,6 +112,13 @@ export async function signIn(
       expiresIn: REFRESH_TOKEN_TIMEOUT,
     });
 
+    log.info('Updating user refresh token', {
+      userId: user.user_id,
+    });
+    await user.update({
+      auth_refresh_token: refreshToken,
+    });
+
     const authUser: AuthUser = {
       user_id: user.user_id,
       email: user.email,

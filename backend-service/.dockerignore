@@ -1,1 +1,4 @@
 node_modules
+dist
+# Ignore package-lock.json since we're using npm install --verbose to install dependencies in the container's source OS, which could be different from the host OS
+package-lock.json
