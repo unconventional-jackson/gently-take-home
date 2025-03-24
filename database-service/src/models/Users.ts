@@ -92,6 +92,14 @@ export class UserModel extends Model<
   declare auth_totp_secret: string;
 
   /**
+   * The user's TOTP enabled status
+   */
+  @Attribute(DataTypes.BOOLEAN)
+  @Default(false)
+  @NotNull
+  declare auth_totp_enabled: CreationOptional<boolean>;
+
+  /**
    * The last time 2FA was verified
    */
   @Attribute(DataTypes.DATE)

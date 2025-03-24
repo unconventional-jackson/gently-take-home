@@ -76,7 +76,16 @@ export async function getDatabaseConfig(args?: GetDatabaseConfigOptions) {
       password: config.POSTGRES_PASSWORD,
       database: config.POSTGRES_DB,
       logging: false,
-      ssl: true,
+
+      // TODO: This only works if we have explicitly configured the Postgres database to use SSL if we are managing it ourselves; it works out of the box and we MUST use SSL with RDS + Proxy
+      ssl: false,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      // dialectOptions: {
+      //   ssl: {
+      //     rejectUnauthorized: false,
+      //   },
+      // },
       hooks: {
         beforeConnect: async (plannedConfig) => {
           if (args?.useRds) {

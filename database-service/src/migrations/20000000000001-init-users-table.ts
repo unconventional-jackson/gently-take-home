@@ -59,6 +59,11 @@ export = {
             type: DataTypes.DATE,
             allowNull: true,
           },
+          auth_totp_enabled: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false,
+          },
 
           // Entity fields - users table is a special case which does not allow for created_by, updated_by, deleted_by, deleted_at
           created_at: {

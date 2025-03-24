@@ -53,6 +53,10 @@ export class ProductModel extends EntityModel<ProductModel> {
     foreignKeyConstraints: true,
   })
   product_attribute_lookups: NonAttribute<ProductAttributeLookupModel[]>;
+
+  toJSON(): Product {
+    return super.toJSON();
+  }
 }
 
 export type Product = Partial<InferAttributes<ProductModel>> & {

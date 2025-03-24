@@ -43,18 +43,19 @@ export = {
           auth_password_hash,
           auth_refresh_token,
           auth_totp_secret,
+          auth_totp_enabled,
           auth_totp_verified_at,
           created_at,
           updated_at
         )
         VALUES (
-          ${ADMIN_USER_ID},
-          N'jackson.graves@me.com',
+          '${ADMIN_USER_ID}',
+          'jackson.graves@me.com',
           NULL,
           true,
-          N'${auth_password_hash}',
+          '${auth_password_hash}',
           NULL,
-          N'${auth_totp_secret}',
+          '${auth_totp_secret}',
           true,
           NULL,
           NOW(),

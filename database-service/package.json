@@ -1,6 +1,7 @@
 {
   "devDependencies": {
     "@aws-sdk/client-secrets-manager": "^3.568.0",
+    "@faker-js/faker": "^9.6.0",
     "@sequelize/core": "^7.0.0-alpha.45",
     "@sequelize/postgres": "^7.0.0-alpha.45",
     "@types/bcrypt": "^5.0.2",
@@ -31,18 +32,19 @@
     "lint:fix:prettier": "prettier --write . --no-error-on-unmatched-pattern",
     "build": "rm -rf dist && tsc --build --clean && tsc",
     "bump": "npm run build && npm version patch --no-git-tag-version && npm i && npm publish",
-    "migration:up:local": "npm run build && cross-env ENV=local sequelize-cli db:migrate --migrations-path ./dist/database/migrations --config ./dist/database/config.js --env local",
-    "migration:down:local": "npm run build && cross-env ENV=local sequelize-cli db:migrate:undo --migrations-path ./dist/database/migrations --config ./dist/database/config.js --env local",
-    "migration:up:dev": "npm run build && cross-env ENV=dev sequelize-cli db:migrate --migrations-path ./dist/database/migrations --config ./dist/database/config.js --env dev",
-    "migration:down:dev": "npm run build && cross-env ENV=dev sequelize-cli db:migrate:undo --migrations-path ./dist/database/migrations --config ./dist/database/config.js --env dev",
-    "migration:up:prod": "npm run build && cross-env ENV=prod sequelize-cli db:migrate --migrations-path ./dist/database/migrations --config ./dist/database/config.js --env prod",
-    "migration:down:prod": "npm run build && cross-env ENV=prod sequelize-cli db:migrate:undo --migrations-path ./dist/database/migrations --config ./dist/database/config.js --env prod"
+    "migration:up:local": "npm run build && cross-env ENV=local sequelize-cli db:migrate --migrations-path ./dist/migrations --config ./dist/config.js --env local",
+    "migration:down:local": "npm run build && cross-env ENV=local sequelize-cli db:migrate:undo --migrations-path ./dist/migrations --config ./dist/config.js --env local",
+    "migration:up:dev": "npm run build && cross-env ENV=dev sequelize-cli db:migrate --migrations-path ./dist/migrations --config ./dist/config.js --env dev",
+    "migration:down:dev": "npm run build && cross-env ENV=dev sequelize-cli db:migrate:undo --migrations-path ./dist/migrations --config ./dist/config.js --env dev",
+    "migration:up:prod": "npm run build && cross-env ENV=prod sequelize-cli db:migrate --migrations-path ./dist/migrations --config ./dist/config.js --env prod",
+    "migration:down:prod": "npm run build && cross-env ENV=prod sequelize-cli db:migrate:undo --migrations-path ./dist/migrations --config ./dist/config.js --env prod"
   },
-  "version": "1.0.4",
+  "version": "1.0.9",
   "dependencies": {
     "@aws-sdk/rds-signer": "^3.772.0",
     "@unconventional-jackson/gently-common-service": "^0.0.2",
     "bcrypt": "^5.1.1",
+    "cross-env": "^7.0.3",
     "speakeasy": "^2.0.0"
   }
 }
