@@ -1,6 +1,6 @@
 import './NavigationLayout.css';
 
-import { Bookmarks, ExitToApp, Inventory } from '@mui/icons-material';
+import { Book, Bookmarks, ExitToApp, Inventory } from '@mui/icons-material';
 import { AppBar, Box, Tab, Tabs, Toolbar } from '@mui/material';
 import { useQueryClient } from '@tanstack/react-query';
 import { PropsWithChildren, useCallback, useState } from 'react';
@@ -56,6 +56,15 @@ export function NavigationLayout({ children }: PropsWithChildren<unknown>) {
                     onClick={() => {
                       navigate('/app/attributes');
                       setSelectedTab(1);
+                    }}
+                  />
+                  <Tab
+                    label="Documentation"
+                    iconPosition="start"
+                    icon={<Book fontSize="small" />}
+                    onClick={() => {
+                      navigate('/app/documentation');
+                      setSelectedTab(2);
                     }}
                   />
                 </Tabs>
